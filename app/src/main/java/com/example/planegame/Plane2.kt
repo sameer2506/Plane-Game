@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 
 class Plane2(context: Context) : Plane(context) {
-    override var plane = arrayOfNulls<Bitmap>(10)
+     override var plane = ArrayList<Bitmap>(10)
     override val bitmap: Bitmap?
         get() = plane[planeFrame]
     override val width: Int

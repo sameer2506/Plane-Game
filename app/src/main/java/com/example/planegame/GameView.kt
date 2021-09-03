@@ -12,7 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import java.util.ArrayList
 
-class GameView(var context: Context) : View(context) {
+class GameView(context: Context) : View(context) {
     var background: Bitmap
     var tank: Bitmap
     var rect: Rect
@@ -20,7 +20,7 @@ class GameView(var context: Context) : View(context) {
     var planes2: ArrayList<Plane>
     var missiles: ArrayList<Missile>
     var explosions: ArrayList<Explosion>
-    var handler: Handler
+    //var handler: Handler
     var runnable: Runnable
     val UPDATE_MILLIS: Long = 30
     var count = 0
@@ -35,13 +35,13 @@ class GameView(var context: Context) : View(context) {
         super.onDraw(canvas)
         canvas.drawBitmap(background, null, rect, null)
         for (i in planes.indices) {
-            canvas.drawBitmap(planes[i].getBitmap(), planes[i].planeX, planes[i].planeY, null)
+            canvas.drawBitmap(planes[i].bitmap!!, planes[i].planeX.toFloat(), planes[i].planeY.toFloat(), null)
             planes[i].planeFrame++
             if (planes[i].planeFrame > 14) {
                 planes[i].planeFrame = 0
             }
             planes[i].planeX -= planes[i].velocity
-            if (planes[i].planeX < -planes[i].getWidth()) {
+            if (planes[i].planeX < -planes[i].width) {
                 planes[i].resetPosition()
                 life--
                 if (life == 0) {
@@ -51,13 +51,13 @@ class GameView(var context: Context) : View(context) {
                     (context as Activity).finish()
                 }
             }
-            canvas.drawBitmap(planes2[i].getBitmap(), planes2[i].planeX, planes2[i].planeY, null)
+            canvas.drawBitmap(planes2[i].bitmap!!, planes2[i].planeX.toFloat(), planes2[i].planeY.toFloat(), null)
             planes2[i].planeFrame++
             if (planes2[i].planeFrame > 9) {
                 planes2[i].planeFrame = 0
             }
             planes2[i].planeX += planes2[i].velocity
-            if (planes2[i].planeX > dWidth + planes2[i].getWidth()) {
+            if (planes2[i].planeX > dWidth + planes2[i].width) {
                 planes2[i].resetPosition()
                 life--
                 if (life == 0) {
@@ -69,17 +69,17 @@ class GameView(var context: Context) : View(context) {
             }
         }
         for (i in missiles.indices) {
-            if (missiles[i].y > -missiles[i].getMissileHeight()) {
+            if (missiles[i].y > -missiles[i].missileHeight) {
                 missiles[i].y -= missiles[i].mVelocity
-                canvas.drawBitmap(missiles[i].missile, missiles[i].x, missiles[i].y, null)
-                if (missiles[i].x >= planes[0].planeX && (missiles[i].x + missiles[i].getMissileWidth()
-                            <= planes[0].planeX + planes[0].getWidth()) && missiles[i].y >= planes[0].planeY && missiles[i].y <= planes[0].planeY + planes[0].getHeight()
+                canvas.drawBitmap(missiles[i].missile, missiles[i].x.toFloat(), missiles[i].y.toFloat(), null)
+                if (missiles[i].x >= planes[0].planeX && (missiles[i].x + missiles[i].missileWidth
+                            <= planes[0].planeX + planes[0].width) && missiles[i].y >= planes[0].planeY && missiles[i].y <= planes[0].planeY + planes[0].height
                 ) {
                     val explosion = Explosion(context)
                     explosion.explosionX =
-                        planes[0].planeX + planes[0].getWidth() / 2 - explosion.getExplosionWidth() / 2
+                        planes[0].planeX + planes[0].width / 2 - explosion.explosionWidth / 2
                     explosion.explosionY =
-                        planes[0].planeY + planes[0].getHeight() / 2 - explosion.getExplosionHeight() / 2
+                        planes[0].planeY + planes[0].height / 2 - explosion.explosionHeight / 2
                     explosions.add(explosion)
                     planes[0].resetPosition()
                     count++
@@ -87,14 +87,14 @@ class GameView(var context: Context) : View(context) {
                     if (point != 0) {
                         sp.play(point, 1f, 1f, 0, 0, 1f)
                     }
-                } else if (missiles[i].x >= planes[1].planeX && (missiles[i].x + missiles[i].getMissileWidth()
-                            <= planes[1].planeX + planes[1].getWidth()) && missiles[i].y >= planes[1].planeY && missiles[i].y <= planes[1].planeY + planes[1].getHeight()
+                } else if (missiles[i].x >= planes[1].planeX && (missiles[i].x + missiles[i].missileWidth
+                            <= planes[1].planeX + planes[1].width) && missiles[i].y >= planes[1].planeY && missiles[i].y <= planes[1].planeY + planes[1].height
                 ) {
                     val explosion = Explosion(context)
                     explosion.explosionX =
-                        planes[1].planeX + planes[1].getWidth() / 2 - explosion.getExplosionWidth() / 2
+                        planes[1].planeX + planes[1].width / 2 - explosion.explosionWidth / 2
                     explosion.explosionY =
-                        planes[1].planeY + planes[1].getHeight() / 2 - explosion.getExplosionHeight() / 2
+                        planes[1].planeY + planes[1].height / 2 - explosion.explosionHeight / 2
                     explosions.add(explosion)
                     planes[1].resetPosition()
                     count++
@@ -102,14 +102,14 @@ class GameView(var context: Context) : View(context) {
                     if (point != 0) {
                         sp.play(point, 1f, 1f, 0, 0, 1f)
                     }
-                } else if (missiles[i].x >= planes2[0].planeX && (missiles[i].x + missiles[i].getMissileWidth()
-                            <= planes2[0].planeX + planes2[0].getWidth()) && missiles[i].y >= planes2[0].planeY && missiles[i].y <= planes2[0].planeY + planes2[0].getHeight()
+                } else if (missiles[i].x >= planes2[0].planeX && (missiles[i].x + missiles[i].missileWidth
+                            <= planes2[0].planeX + planes2[0].width) && missiles[i].y >= planes2[0].planeY && missiles[i].y <= planes2[0].planeY + planes2[0].height
                 ) {
                     val explosion = Explosion(context)
                     explosion.explosionX =
-                        planes2[0].planeX + planes2[0].getWidth() / 2 - explosion.getExplosionWidth() / 2
+                        planes2[0].planeX + planes2[0].width / 2 - explosion.explosionWidth / 2
                     explosion.explosionY =
-                        planes2[0].planeY + planes2[0].getHeight() / 2 - explosion.getExplosionHeight() / 2
+                        planes2[0].planeY + planes2[0].height / 2 - explosion.explosionHeight / 2
                     explosions.add(explosion)
                     planes2[0].resetPosition()
                     count++
@@ -117,14 +117,14 @@ class GameView(var context: Context) : View(context) {
                     if (point != 0) {
                         sp.play(point, 1f, 1f, 0, 0, 1f)
                     }
-                } else if (missiles[i].x >= planes2[1].planeX && (missiles[i].x + missiles[i].getMissileWidth()
-                            <= planes2[1].planeX + planes2[1].getWidth()) && missiles[i].y >= planes2[1].planeY && missiles[i].y <= planes2[1].planeY + planes2[1].getHeight()
+                } else if (missiles[i].x >= planes2[1].planeX && (missiles[i].x + missiles[i].missileWidth
+                            <= planes2[1].planeX + planes2[1].width) && missiles[i].y >= planes2[1].planeY && missiles[i].y <= planes2[1].planeY + planes2[1].height
                 ) {
                     val explosion = Explosion(context)
                     explosion.explosionX =
-                        planes2[1].planeX + planes2[1].getWidth() / 2 - explosion.getExplosionWidth() / 2
+                        planes2[1].planeX + planes2[1].width / 2 - explosion.explosionWidth / 2
                     explosion.explosionY =
-                        planes2[1].planeY + planes2[1].getHeight() / 2 - explosion.getExplosionHeight() / 2
+                        planes2[1].planeY + planes2[1].height / 2 - explosion.explosionHeight / 2
                     explosions.add(explosion)
                     planes2[1].resetPosition()
                     count++
@@ -139,8 +139,8 @@ class GameView(var context: Context) : View(context) {
         }
         for (j in explosions.indices) {
             canvas.drawBitmap(
-                explosions[j].getExplosion(explosions[j].explosionFrame), explosions[j].explosionX,
-                explosions[j].explosionY, null
+                explosions[j].getExplosion(explosions[j].explosionFrame)!!, explosions[j].explosionX.toFloat(),
+                explosions[j].explosionY.toFloat(), null
             )
             explosions[j].explosionFrame++
             if (explosions[j].explosionFrame > 8) {
@@ -184,10 +184,10 @@ class GameView(var context: Context) : View(context) {
     }
 
     companion object {
-        var dWidth: Int
-        var dHeight: Int
-        var tankWidth: Int
-        var tankHeight: Int
+        var dWidth: Int = 0
+        var dHeight: Int = 0
+        var tankWidth: Int = 0
+        var tankHeight: Int = 0
     }
 
     init {
@@ -208,8 +208,9 @@ class GameView(var context: Context) : View(context) {
             planes.add(plane)
             val plane2 = Plane2(context)
             planes2.add(plane2)
+            planes2.add(plane2)
         }
-        handler = Handler()
+        //handler = Handler()
         runnable = Runnable { invalidate() }
         tankWidth = tank.width
         tankHeight = tank.height

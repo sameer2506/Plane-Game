@@ -5,21 +5,21 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import java.util.*
 
-class Plane(context: Context) {
-    var plane = arrayOfNulls<Bitmap>(15)
+open class Plane(context: Context) {
+    open var plane = ArrayList<Bitmap>(15)
     var planeX = 0
     var planeY = 0
     var velocity = 0
     var planeFrame = 0
     var random: Random
-    val bitmap: Bitmap?
+    open val bitmap: Bitmap?
         get() = plane[planeFrame]
-    val width: Int
+    open val width: Int
         get() = plane[0]!!.width
-    val height: Int
+    open val height: Int
         get() = plane[0]!!.height
 
-    fun resetPosition() {
+    open fun resetPosition() {
         planeX = GameView.dWidth + random.nextInt(1200)
         planeY = random.nextInt(300)
         velocity = 8 + random.nextInt(13)
@@ -46,3 +46,4 @@ class Plane(context: Context) {
         resetPosition()
     }
 }
+
